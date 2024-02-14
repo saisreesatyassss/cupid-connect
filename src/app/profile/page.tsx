@@ -196,7 +196,8 @@ const physicalIntimacyOptions = [
     <section className="  h-screen relative">
  
      
-<form className="fixed h-[calc(100vh-6rem)] w-[30vw] overflow-auto top-24 left-[calc(50%-40vw)] z-10 bg-white p-8 rounded-lg shadow-lg" onSubmit={handleSubmit}>
+<form className="fixed h-[calc(100vh-6rem)] w-[90vw] md:w-[28vw]  overflow-auto top-24 left-[calc(50%-45vw)] z-10 bg-white p-8 rounded-lg shadow-lg " onSubmit={handleSubmit}>
+ 
   <div className="mb-4">
     <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Name:</label>
     <input 
