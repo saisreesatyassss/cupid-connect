@@ -61,8 +61,7 @@ const signIn = async () => {
             <div className="logo-container" onClick={signIn}>
 
         {/* <Link href="/">  */}
-          {/* Logo container with blinking effect */}
-          <div className="logo-container">
+ 
             <Image
               src="/Logo1.png"
               width={250}
@@ -70,8 +69,7 @@ const signIn = async () => {
               alt="Logo"
               className="logo"
             />
-          </div>
-        {/* </Link> */}
+        
                </div>
 
       </div>
@@ -87,13 +85,17 @@ const signIn = async () => {
       />
 
       {/* CSS */}
-      <style jsx>{`
-        /* Hide the image on screens smaller than 768px */
-        @media (max-width: 768px) {
-          .logo-container {
-            display: none;
-          }
+      <style jsx>{` 
+      
+
+    @media (max-width: 768px) {
+        .logo {
+ 
+           width: 150px !important;
+            height: auto !important;
         }
+    }
+
 
         /* Logo blinking animation */
         @keyframes blink {
