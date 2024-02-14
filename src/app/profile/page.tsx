@@ -167,6 +167,8 @@ const auth = getAuth(firebaseApp);
   </button>
 </form>
 
+
+
       {/* Iframe */}
       <iframe
         src="https://saisreesatyassss.github.io/LoveTree/"
@@ -176,7 +178,16 @@ const auth = getAuth(firebaseApp);
         allowFullScreen
         className="z-0"
       />
-
+{/* <div>
+     <h1>Profile Page</h1>
+       {user && (
+         <div>
+           <p>Welcome, {user.displayName}</p>
+           {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />}
+           <button onClick={handleSignOut}>Sign out</button>
+         </div>
+       )}
+     </div> */}
       {/* CSS */}
       <style jsx>
         {`

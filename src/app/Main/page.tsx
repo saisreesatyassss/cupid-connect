@@ -5,6 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { initializeApp } from 'firebase/app';
+
+  // import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+  
 import { GoogleAuthProvider, User, getAuth, signInWithPopup } from 'firebase/auth';
 const firebaseConfig = {
   apiKey: "AIzaSyACPxShdNv0F5i3xFgH6iA2iw9uUbcmCvI",
@@ -58,8 +62,8 @@ const signIn = async () => {
     <section className="text-white h-screen relative">
       {/* Image */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            {/* <div className="logo-container" onClick={signIn}> */}
-            <div className="logo-container">
+            <div className="logo-container" onClick={signIn}>
+            {/* <div className="logo-container"> */}
 
         {/* <Link href="/">  */}
  
