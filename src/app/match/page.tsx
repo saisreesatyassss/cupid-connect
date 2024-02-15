@@ -259,7 +259,7 @@ const db = getFirestore(firebaseApp);
 {matchedUsers.length > 0 ? (
   <ul style={{ fontFamily: 'Arial', fontSize: '16px', color: '#666' }}>
     {matchedUsers.map((userName, index) => (
-      <li key={index}>- {userName}</li>
+      <li key={index}>{userName}</li>
     ))}
   </ul>
 ) : (
