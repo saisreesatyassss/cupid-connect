@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 //  "use client"
 
 // import React, { useState, useEffect } from 'react';
@@ -247,17 +248,24 @@ const db = getFirestore(firebaseApp);
        {user && (
          <div>
             <label htmlFor="name" className="block text-gray-700 font-bold mb-2"> Welcome,{user.displayName}</label>
-            <label htmlFor="name" className="block text-gray-700  font-w400 mb-2"> Please create your profile genuinely</label>
+            <label htmlFor="name" className="block text-gray-700  font-w400 mb-2">Profiles That'll Make Your Heart Skip Beat</label>
            {/* <p>{user.displayName}</p> */}
            {/* {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />} */}
            {/* <button onClick={handleSignOut}>Sign out</button> */}
          </div>
        )}
 
-       <h1>Matches</h1>
-       {matchedUsers.map((userName, index) => (
-          <div key={index}>{userName}</div>
-        ))}
+      <h1 style={{ fontFamily: 'Arial', color: '#333' }}>Meet Your Potential Matches!</h1>
+{matchedUsers.length > 0 ? (
+  <ul style={{ fontFamily: 'Arial', fontSize: '16px', color: '#666' }}>
+    {matchedUsers.map((userName, index) => (
+      <li key={index}>- {userName}</li>
+    ))}
+  </ul>
+) : (
+  <p style={{ fontFamily: 'Arial', fontSize: '16px', color: '#666' }}>Oops, looks like your search history is as empty as your love life! But hey, at least you're consistent in not finding any matches, whether it's on the internet or in your dating endeavors. Maybe you should start swiping right on memes instead, they seem to be the only thing consistently making you laugh these days!</p>
+)}
+
 </div> 
 </form>
 
