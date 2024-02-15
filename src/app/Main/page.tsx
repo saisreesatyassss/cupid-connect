@@ -28,7 +28,7 @@ const auth = getAuth(firebaseApp);
 // Define the Main component
 function Main() {
 
-   const [user, setUser] = useState<User | null>(null);
+const [user, setUser] = useState<User | null>(null);
 const router = useRouter();
 
 const signIn = async () => {
@@ -60,6 +60,21 @@ const signIn = async () => {
   return (
     // Main section with a full height background
     <section className="text-white h-screen relative">
+
+
+         <div>
+     {/* <h1>Profile Page</h1> */}
+       {user && (
+         <div>
+            <label htmlFor="name" className="block text-gray-700 font-bold mb-2"> Welcome,{user.displayName}</label>
+            <label htmlFor="name" className="block text-gray-700  font-w400 mb-2"> Please create your profile genuinely</label>
+           {/* <p>{user.displayName}</p> */}
+           {/* {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />} */}
+           {/* <button onClick={handleSignOut}>Sign out</button> */}
+         </div>
+       )}
+</div> 
+
       {/* Image */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
             <div className="logo-container" onClick={signIn}>

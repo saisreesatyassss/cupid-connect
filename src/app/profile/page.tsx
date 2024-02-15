@@ -19,8 +19,6 @@ const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-
-  const [selectedOption, setSelectedOption] = useState<string>('');  
   const [selectedRelationshipOption, setSelectedRelationshipOption] = useState<string>('');  
   const [selectedCommunicationOption, setSelectedCommunicationOption] = useState<string>('');  
   const [selectedStanceOnChildren, setSelectedStanceOnChildren] = useState<string>('');  
@@ -31,8 +29,8 @@ const ProfilePage = () => {
   const [selectedConflictResolution  , setSelectedConflictResolution] = useState<string>('');  
   const [selectedFinancesApproach   , setSelectedFinancesApproach] = useState<string>(''); 
   const [selectedPhysicalIntimacy    , setSelectedPhysicalIntimacy ] = useState<string>('');  
- 
-// const mcqOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4']; // Example MCQ options
+   const [loading, setLoading] = useState(false);
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyACPxShdNv0F5i3xFgH6iA2iw9uUbcmCvI",
@@ -77,7 +75,8 @@ const auth = getAuth(firebaseApp);
 
  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault(); // Prevent default form submission behavior
-  
+      setLoading(true); // Set loading state to true
+
   // Get the currently authenticated user
   const auth = getAuth();
   const currentUser = auth.currentUser;
@@ -110,14 +109,27 @@ const auth = getAuth(firebaseApp);
 
     setName('');
     setSelectedCommunicationOption('');
-    setSelectedCommunicationOption('');
+    setSelectedRelationshipOption('');
+    setSelectedStanceOnChildren('');
+    setSelectedIdealFirstDate('');
+    setSelectedLifestyle('');
+    setSelectedAttitudeTowardsPets('');
+    setSelectedReligionSpirituality(''); 
+    setSelectedConflictResolution(''); 
+    setSelectedPhysicalIntimacy(''); 
+    setSelectedFinancesApproach('');  
     setAge(18);
     setGender('');
     setInterests(''); 
+
+          window.location.href = '/match';
+
   } catch (error) {
     console.error('Error updating/creating profile:', error);
     alert('Error updating/creating profile. Please try again.');
-  }
+  } finally {
+      setLoading(false); // Reset loading state after form submission
+    }
 };
 
 const relationshipOptions = [
@@ -194,10 +206,33 @@ const physicalIntimacyOptions = [
   return (
    
     <section className="  h-screen relative">
- 
+  {/* <div>
+     <h1>Profile Page</h1>
+       {user && (
+         <div>
+           <p>Welcome, {user.displayName}</p>
+           {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />}
+           <button onClick={handleSignOut}>Sign out</button>
+         </div>
+       )}
+</div>  */}
      
 <form className="fixed h-[calc(100vh-6rem)] w-[90vw] md:w-[28vw]  overflow-auto top-24 left-[calc(50%-45vw)] z-10 bg-white p-8 rounded-lg shadow-lg " onSubmit={handleSubmit}>
+
+
  
+   <div>
+     {/* <h1>Profile Page</h1> */}
+       {user && (
+         <div>
+            <label htmlFor="name" className="block text-gray-700 font-bold mb-2"> Welcome,{user.displayName}</label>
+            <label htmlFor="name" className="block text-gray-700  font-w400 mb-2"> Please create your profile genuinely</label>
+           {/* <p>{user.displayName}</p> */}
+           {/* {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />} */}
+           {/* <button onClick={handleSignOut}>Sign out</button> */}
+         </div>
+       )}
+</div> 
   <div className="mb-4">
     <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Name:</label>
     <input 
@@ -438,6 +473,9 @@ const physicalIntimacyOptions = [
   >
     Create Profile
   </button>
+
+            {loading ? 'Creating Profile...' : 'Create Profile'}
+
 </form>
 
 
