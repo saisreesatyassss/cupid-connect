@@ -1,7 +1,5 @@
-// lib/firebaseConfig.ts
-import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import { GoogleAuthProvider, User, getAuth, signInWithPopup } from 'firebase/auth';
+importScripts('https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.x.x/firebase-messaging-compat.js');
 
 const firebaseConfig = {
   apiKey: "AIzaSyACPxShdNv0F5i3xFgH6iA2iw9uUbcmCvI",
@@ -17,4 +15,10 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
-export { messaging, getToken, onMessage,firebaseApp };
+messaging.onBackgroundMessage((payload) => {
+  const notification = payload.notification;
+  self.registration.showNotification(notification.title, {
+    body: notification.body,
+    icon: '/Logo.jpg'
+  });
+});

@@ -3,7 +3,8 @@
 import { useRouter } from 'next/navigation'
 import React, { useState, useEffect } from 'react'; 
 import { getAuth, onAuthStateChanged, signOut, User } from 'firebase/auth'; 
-import "./styles.css";  import { firebaseApp} from "../../lib/firebaseConfig";
+import "./styles.css"; 
+import { firebaseApp} from "../../lib/firebaseConfig";
 
 import { addDoc, collection, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 const ProfilePage = () => {
