@@ -2,11 +2,9 @@
 "use client"
 import { useRouter } from 'next/navigation'
 import React, { useState, useEffect } from 'react'; 
-import { getAuth, onAuthStateChanged, signOut, User } from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
-import Image from 'next/image';
-import Link from 'next/link';
-import "./styles.css";  
+import { getAuth, onAuthStateChanged, signOut, User } from 'firebase/auth'; 
+import "./styles.css";  import { firebaseApp} from "../../lib/firebaseConfig";
+
 import { addDoc, collection, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 const ProfilePage = () => {
 
@@ -32,29 +30,37 @@ const ProfilePage = () => {
    const [loading, setLoading] = useState(false);
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyACPxShdNv0F5i3xFgH6iA2iw9uUbcmCvI",
-  authDomain: "cupid-connect-d7fce.firebaseapp.com",
-  projectId: "cupid-connect-d7fce",
-  storageBucket: "cupid-connect-d7fce.appspot.com",
-  messagingSenderId: "959322105870",
-  appId: "1:959322105870:web:6ddc12f97727efb1bd345f",
-  measurementId: "G-Q0GFTYFTHN"
-};
-
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-
-// Get the Firebase Auth instance
+  
 const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
   useEffect(() => {
-    // Check if there is a currently signed-in user
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+   
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
+        const userDocRef = doc(db, 'users', user.uid);
+        const userSnapshot = await getDoc(userDocRef);
+        
+        if (userSnapshot.exists()) {
+          const userData = userSnapshot.data();
+          setName(userData.name || '');
+          setAge(userData.age || 18);
+          setGender(userData.gender || '');
+          setInterests(userData.interests || '');
+          setSelectedCommunicationOption(userData.selectedCommunicationOption || '');
+          setSelectedRelationshipOption(userData.selectedRelationshipOption || '');
+          setSelectedStanceOnChildren(userData.selectedStanceOnChildren || '');
+          setSelectedLifestyle(userData.selectedLifestyle || '');
+          setSelectedIdealFirstDate(userData.selectedIdealFirstDate || '');
+          setSelectedAttitudeTowardsPets(userData.selectedAttitudeTowardsPets || '');
+          setSelectedReligionSpirituality(userData.selectedReligionSpirituality || '');
+          setSelectedConflictResolution(userData.selectedConflictResolution || '');
+          setSelectedPhysicalIntimacy(userData.selectedPhysicalIntimacy || '');
+          setSelectedFinancesApproach(userData.selectedFinancesApproach || '');
+        }
+
       } else {
-        // If no user is signed in, redirect to the sign-in page
         router.push('/');
       }
     });
@@ -65,7 +71,7 @@ const auth = getAuth(firebaseApp);
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      router.push('/'); // Redirect to the sign-in page after signing out
+      router.push('/'); 
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -128,7 +134,7 @@ const auth = getAuth(firebaseApp);
     console.error('Error updating/creating profile:', error);
     alert('Error updating/creating profile. Please try again.');
   } finally {
-      setLoading(false); // Reset loading state after form submission
+      setLoading(false);  
     }
 };
 
@@ -206,29 +212,16 @@ const physicalIntimacyOptions = [
   return (
    
     <section className="  h-screen relative">
-  {/* <div>
-     <h1>Profile Page</h1>
-       {user && (
-         <div>
-           <p>Welcome, {user.displayName}</p>
-           {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />}
-           <button onClick={handleSignOut}>Sign out</button>
-         </div>
-       )}
-</div>  */}
      
 <form className="fixed h-[calc(100vh-6rem)] w-[90vw] md:w-[28vw]  overflow-auto top-24 left-[calc(50%-45vw)] z-10 bg-white p-8 rounded-lg shadow-lg " onSubmit={handleSubmit}>
 
 
  
-   <div>
-     {/* <h1>Profile Page</h1> */}
+   <div> 
        {user && (
          <div>
             <label htmlFor="name" className="block text-gray-700 font-bold mb-2"> Welcome,{user.displayName}</label>
             <label htmlFor="name" className="block text-gray-700  font-w400 mb-2"> Please create your profile genuinely</label>
-           {/* <p>{user.displayName}</p> */}
-           {/* {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />} */}
            {/* <button onClick={handleSignOut}>Sign out</button> */}
          </div>
        )}
@@ -268,25 +261,11 @@ const physicalIntimacyOptions = [
       <option value="">Select Gender</option>
       <option value="male">Male</option>
       <option value="female">Female</option>
-      {/* <option value="other">Other</option> */}
+      <option value="other">Other</option>
     </select>
   </div>
   
-  {/* <div className="mb-4">
-  <label htmlFor="mcq" className="block text-gray-700 font-bold mb-2">Multiple Choice Question:</label>
-  <select 
-    id="mcq" 
-    value={selectedOption} 
-    onChange={(e) => setSelectedOption(e.target.value)} 
-    className="border rounded-md px-4 py-2 w-full focus:outline-none focus:border-pink-400"
-    required 
-  >
-    <option value="">Select Option</option>
-    {mcqOptions.map((option, index) => (
-      <option key={index} value={option}>{option}</option>
-    ))}
-  </select>
-</div> */}
+ 
 <div>
   {/* Relationship Preference */}
   <div className="mb-4">
@@ -465,22 +444,21 @@ const physicalIntimacyOptions = [
         <label htmlFor={`physicalIntimacyOption${index}`} className="text-gray-800">{option}</label>
       </div>
     ))}
-  </div>
-  {/* Submit button */}
-  <button 
-    type="submit" 
-    className="bg-pink-500 text-white font-bold py-2 px-4 rounded focus:outline-none hover:bg-pink-700"
-  >
-    Create Profile
-  </button>
+  </div> 
+<button 
+   type="submit"
+   className="bg-pink-500 text-white font-bold py-2 px-4 rounded focus:outline-none hover:bg-pink-700 disabled:bg-gray-400"
+   disabled={!name || !age || !gender || !selectedRelationshipOption}
+>
+   {loading ? 'Creating Profile...' : 'Create Profile'}
+</button>
 
-            {loading ? 'Creating Profile...' : 'Create Profile'}
 
+          
 </form>
 
 
-
-      {/* Iframe */}
+ 
       <iframe
         src="https://saisreesatyassss.github.io/LoveTree/"
         width="100%"
@@ -489,17 +467,7 @@ const physicalIntimacyOptions = [
         allowFullScreen
         className="z-0"
       />
-{/* <div>
-     <h1>Profile Page</h1>
-       {user && (
-         <div>
-           <p>Welcome, {user.displayName}</p>
-           {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />}
-           <button onClick={handleSignOut}>Sign out</button>
-         </div>
-       )}
-     </div> */}
-      {/* CSS */}
+ 
       <style jsx>
         {`
     

@@ -3,10 +3,7 @@
 // export default Navbar;
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-// import Logo from '../Logo';
-// import { button } from '@nextui-org/react';
-
+import { useState } from 'react'; 
 function NavBar() {
   const [navbar, setNavbar] = useState(false);
   return (
@@ -80,12 +77,12 @@ function NavBar() {
                   </Link>
                 </li> */}
                 <li className="  bg-black  text-white py-1.5 px-3 text-center border-b-2 rounded-xl md:border-b-0   hover:bg-blue-900  border-blue-900  md:hover:text-blue-600 md:hover:bg-transparent">
-                  <Link href="#YourMatch" onClick={() => setNavbar(!navbar)}>
+                  <Link href="/match" onClick={() => setNavbar(!navbar)}>
                     Your Match
                   </Link>
                 </li>
                 <li className="bg-black   text-white  py-1.5 px-3 text-center  border-b-2 rounded-xl  md:border-b-0  hover:bg-blue-600  border-blue-900  md:hover:text-blue-600 md:hover:bg-transparent ">
-                  <Link href="#Profile" onClick={() => setNavbar(!navbar)}>
+                  <Link href="/profile" onClick={() => setNavbar(!navbar)}>
                     Profile
                   </Link>   
                 </li>

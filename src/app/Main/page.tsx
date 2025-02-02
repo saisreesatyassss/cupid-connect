@@ -1,87 +1,132 @@
 // Import the necessary libraries
 "use client";
 import React, { useState } from 'react'; 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { initializeApp } from 'firebase/app';
+import Image from 'next/image'; 
+import { useRouter } from 'next/navigation'; 
+import { firebaseApp} from "../../lib/firebaseConfig";
 
-  // import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-  
+
 import { GoogleAuthProvider, User, getAuth, signInWithPopup } from 'firebase/auth';
-const firebaseConfig = {
-  apiKey: "AIzaSyACPxShdNv0F5i3xFgH6iA2iw9uUbcmCvI",
-  authDomain: "cupid-connect-d7fce.firebaseapp.com",
-  projectId: "cupid-connect-d7fce",
-  storageBucket: "cupid-connect-d7fce.appspot.com",
-  messagingSenderId: "959322105870",
-  appId: "1:959322105870:web:6ddc12f97727efb1bd345f",
-  measurementId: "G-Q0GFTYFTHN"
-};
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-
-// Get the Firebase Auth instance
+ 
+ 
 const auth = getAuth(firebaseApp);
-// Define the Main component
+ 
 function Main() {
 
 const [user, setUser] = useState<User | null>(null);
 const router = useRouter();
 
+// const signIn = async () => {
+//   try {
+ 
+//     const currentUser = auth.currentUser;
+//     if (currentUser) {
+ 
+//       console.log("User is already signed in.");
+//       router.push('/profile');
+//       return;  
+//     }
+
+ 
+//     const provider = new GoogleAuthProvider();
+//     const result = await signInWithPopup(auth, provider);
+//     setUser(result.user);
+//     if (typeof window !== 'undefined') {
+//       console.log("Redirecting to /profile");
+//       router.push('/profile');
+//     }
+//   } catch (error) {
+//     console.error("Error signing in:", error);
+//   }
+// };
+
 const signIn = async () => {
   try {
-    // Check if user is already signed in
     const currentUser = auth.currentUser;
+    
     if (currentUser) {
-      // If user is already signed in, redirect to profile page
       console.log("User is already signed in.");
-      router.push('/profile');
-      return; // Exit the function
+      await checkUserProfile(currentUser.uid);
+      return;
     }
 
-    // If user is not signed in, proceed with signing in
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     setUser(result.user);
+
     if (typeof window !== 'undefined') {
-      console.log("Redirecting to /profile");
-      router.push('/profile');
+      console.log("Checking user profile...");
+      await checkUserProfile(result.user.uid);
+      console.log(checkUserProfile(result.user.uid));
+
     }
   } catch (error) {
     console.error("Error signing in:", error);
   }
 };
 
+const checkUserProfile = async (userId: string) => {
+  try {
+    const db = getFirestore(firebaseApp);
+    const userDocRef = doc(db, 'users', userId);
+    const userDocSnapshot = await getDoc(userDocRef);
+
+    if (userDocSnapshot.exists()) {
+      const userData = userDocSnapshot.data();
+
+      // Check if all profile fields are filled
+      const requiredFields = [
+        'name', 'age', 'gender',
+        'selectedCommunicationOption', 'selectedRelationshipOption',
+        'selectedStanceOnChildren', 'selectedLifestyle',
+        'selectedIdealFirstDate', 'selectedAttitudeTowardsPets',
+        'selectedReligionSpirituality', 'selectedConflictResolution',
+        'selectedFinancesApproach', 'selectedPhysicalIntimacy'
+      ];
+      
+      const isProfileComplete = requiredFields.every(field => userData[field]);
+
+      if (isProfileComplete) {
+        console.log("Profile complete. Redirecting to /match");
+        router.push('/match');
+      } else {
+        console.log("Profile incomplete. Redirecting to /profile");
+        router.push('/profile');
+      }
+    } else {
+      console.log("No profile found. Redirecting to /profile");
+      router.push('/profile');
+    }
+  } catch (error) {
+    console.error("Error checking user profile:", error);
+    router.push('/profile');
+  }
+};
+
 
 
   return (
-    // Main section with a full height background
+ 
     <section className="text-white h-screen relative">
 
 
          <div>
-     {/* <h1>Profile Page</h1> */}
+   
        {user && (
          <div>
             <label htmlFor="name" className="block text-gray-700 font-bold mb-2"> Welcome,{user.displayName}</label>
             <label htmlFor="name" className="block text-gray-700  font-w400 mb-2"> Please create your profile genuinely</label>
-           {/* <p>{user.displayName}</p> */}
-           {/* {user.photoURL && <img src={user.photoURL} alt="Profile" style={{ width: '100px', borderRadius: '50%' }} />} */}
-           {/* <button onClick={handleSignOut}>Sign out</button> */}
+ 
          </div>
        )}
 </div> 
 
-      {/* Image */}
+   
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
             <div className="logo-container" onClick={signIn}>
-            {/* <div className="logo-container"> */}
-
-        {/* <Link href="/">  */}
- 
+      
             <Image
               src="/Logo1.png"
               width={250}
@@ -138,6 +183,5 @@ const signIn = async () => {
     </section>
   );
 }
-
-// Export the Main component
+ 
 export default Main;
